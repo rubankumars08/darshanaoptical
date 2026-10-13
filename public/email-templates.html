@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darshana Optical — Email Templates Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-badge {
+      background: #fc5a06;
+      color: white;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+    .tab-btn.active {
+      background: #fc5a06;
+      border-color: #fc5a06;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(252, 90, 6, 0.3);
+    }
+    .device-toggle {
+      display: flex;
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 3px;
+      border: 1px solid #334155;
+      margin-left: 8px;
+    }
+    .device-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .device-btn.active {
+      background: #334155;
+      color: #ffffff;
+    }
+    .meta-bar {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 12px 24px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .meta-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .meta-label {
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .meta-val {
+      color: #f1f5f9;
+      font-weight: 600;
+    }
+    .meta-val.subject {
+      color: #fb923c;
+    }
+    .preview-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+      overflow: auto;
+    }
+    .preview-frame-wrapper {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+      overflow: hidden;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 680px;
+      height: 750px;
+      display: flex;
+      flex-direction: column;
+    }
+    .preview-frame-wrapper.mobile {
+      width: 390px;
+      height: 720px;
+      border-radius: 32px;
+      box-shadow: 0 0 0 8px #334155, 0 25px 50px -12px rgba(0,0,0,0.7);
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-badge">Darshana</div>
+      <div>
+        <div class="brand-title">Email Templates Gallery</div>
+        <div class="brand-sub">Dual-Email Architecture (Owner & Customer)</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="tab-btn active" onclick="switchTemplate(0)">1. Eye Test ➔ Customer</button>
+      <button class="tab-btn" onclick="switchTemplate(1)">2. Eye Test ➔ Shop Owner</button>
+      <button class="tab-btn" onclick="switchTemplate(2)">3. Inquiry ➔ Customer</button>
+      <button class="tab-btn" onclick="switchTemplate(3)">4. Inquiry ➔ Shop Owner</button>
+
+      <div class="device-toggle">
+        <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')">Desktop</button>
+        <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')">Mobile</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="meta-bar">
+    <div class="meta-item">
+      <span class="meta-label">Subject:</span>
+      <span class="meta-val subject" id="meta-subject">...</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">From:</span>
+      <span class="meta-val" id="meta-from">"Darshana Optical" &lt;darshanaoptical31@gmail.com&gt;</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">To:</span>
+      <span class="meta-val" id="meta-to">...</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Trigger:</span>
+      <span class="meta-val" id="meta-trigger">...</span>
+    </div>
+  </div>
+
+  <div class="preview-container">
+    <div class="preview-frame-wrapper" id="frame-wrapper">
+      <iframe id="preview-frame"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const TEMPLATES = [
+      {
+        id: 0,
+        title: "Eye Test Appointment Confirmation (Customer)",
+        subject: "Appointment Request Confirmed — Darshana Optical",
+        to: "priya.raman@example.com (Customer)",
+        trigger: "User books an eye examination on /book or via popup modal",
+        html: `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f8fafc;font-family:'Segoe UI',Arial,sans-serif;color:#0f172a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);max-width:100%;">
+          <tr>
+            <td style="background:linear-gradient(135deg, #fc5a06 0%, #ea580c 100%);padding:36px 32px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:800;letter-spacing:-0.4px;">
+                Darshana Optical
+              </h1>
+              <p style="margin:6px 0 0;color:rgba(255,255,255,0.9);font-size:13px;">
+                Eye Care &amp; Premium Eyewear · Harur
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 28px;">
+              <p style="margin:0 0 12px;font-size:16px;color:#0f172a;">
+                Dear <strong>Priya Raman</strong>,
+              </p>
+              <p style="margin:0 0 24px;font-size:14.5px;color:#334155;line-height:1.6;">
+                Thank you for choosing <strong>Darshana Optical</strong>. We have successfully received your eye testing appointment request. Our team will review your requested slot and confirm shortly.
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff7ed;border:1px solid #ffedd5;border-radius:14px;padding:20px;margin-bottom:24px;">
+                <tr>
+                  <td style="padding:0 0 12px;border-bottom:1px solid #fed7aa;">
+                    <span style="font-size:12px;font-weight:800;color:#ea580c;text-transform:uppercase;letter-spacing:0.5px;">
+                      Appointment Summary
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top:12px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr><td style="padding:6px 0;font-size:13px;color:#7c2d12;width:130px;">Service</td><td style="padding:6px 0;font-size:14px;font-weight:700;color:#431407;">Comprehensive Eye Examination</td></tr>
+                      <tr><td style="padding:6px 0;font-size:13px;color:#7c2d12;">Date</td><td style="padding:6px 0;font-size:14px;font-weight:700;color:#431407;">Friday, September 25, 2026</td></tr>
+                      <tr><td style="padding:6px 0;font-size:13px;color:#7c2d12;">Time Window</td><td style="padding:6px 0;font-size:14px;font-weight:700;color:#431407;">11:30 AM</td></tr>
+                      <tr><td style="padding:6px 0;font-size:13px;color:#7c2d12;">Phone</td><td style="padding:6px 0;font-size:13px;color:#431407;">+91 98401 23456</td></tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <div style="background:#f8fafc;border-left:4px solid #fc5a06;padding:14px 18px;border-radius:0 12px 12px 0;margin-bottom:24px;">
+                <h4 style="margin:0 0 6px;font-size:13.5px;color:#0f172a;">Important tips for your visit:</h4>
+                <ul style="margin:0;padding-left:18px;font-size:13px;color:#475569;line-height:1.6;">
+                  <li>If you wear glasses or contact lenses, please bring your existing pair with you.</li>
+                  <li>A comprehensive eye examination typically takes 20 to 30 minutes.</li>
+                </ul>
+              </div>
+              <p style="margin:0 0 6px;font-size:13px;color:#334155;line-height:1.5;">
+                📍 <strong>Address:</strong> Tvk Nagar, Salem Bypass Road, opposite Vasanth &amp; Co, Harur – 636 903
+              </p>
+              <p style="margin:0 0 20px;font-size:13px;color:#334155;line-height:1.5;">
+                📞 <strong>Phone:</strong> <a href="tel:+918870571536" style="color:#fc5a06;text-decoration:none;font-weight:600;">+91 88705 71536</a>
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="https://wa.me/918870571536?text=Hi%20Darshana%20Optical,%20checking%20on%20my%20appointment" style="display:inline-block;background:#25d366;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;">
+                      💬 Chat on WhatsApp
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f1f5f9;padding:18px 24px;text-align:center;border-top:1px solid #e2e8f0;">
+              <p style="margin:0;font-size:11.5px;color:#64748b;">
+                © 2026 Darshana Optical · Harur, Tamil Nadu<br />
+                <a href="https://darshanaoptical.com" style="color:#fc5a06;text-decoration:none;">darshanaoptical.com</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+      },
+      {
+        id: 1,
+        title: "Eye Test Appointment Alert (Shop Owner)",
+        subject: "🔔 New Eye Test Booking: Priya Raman (9840123456)",
+        to: "darshanaoptical31@gmail.com (Shop Owner)",
+        trigger: "User submits eye test booking form",
+        html: `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:'Segoe UI',Arial,sans-serif;color:#0f172a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);max-width:100%;">
+          <tr>
+            <td style="background:#0f172a;padding:26px 30px;border-bottom:4px solid #fc5a06;">
+              <span style="background:#fc5a06;color:#ffffff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;">
+                New Appointment Alert
+              </span>
+              <h1 style="margin:10px 0 0;color:#ffffff;font-size:21px;font-weight:800;">
+                Eye Test Booking Request
+              </h1>
+              <p style="margin:4px 0 0;color:#94a3b8;font-size:13px;">
+                Submitted via Darshana Optical Website
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px;">
+              <p style="margin:0 0 18px;font-size:14.5px;line-height:1.5;">
+                A new eye examination request has been submitted by <strong>Priya Raman</strong>. Details below:
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:22px;">
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;width:140px;">Customer Name</td><td style="padding:7px 0;font-size:14px;font-weight:700;color:#0f172a;">Priya Raman</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Phone Number</td><td style="padding:7px 0;font-size:14px;font-weight:700;color:#fc5a06;"><a href="tel:9840123456" style="color:#fc5a06;text-decoration:none;">98401 23456</a></td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Customer Email</td><td style="padding:7px 0;font-size:13px;color:#0f172a;">priya.raman@example.com</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Service Requested</td><td style="padding:7px 0;font-size:14px;font-weight:600;color:#0f172a;">Comprehensive Eye Examination</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Preferred Date</td><td style="padding:7px 0;font-size:14px;font-weight:600;color:#0f172a;">Friday, September 25, 2026</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Preferred Time</td><td style="padding:7px 0;font-size:14px;font-weight:600;color:#0f172a;">11:30 AM</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Wears Glasses?</td><td style="padding:7px 0;font-size:13px;color:#0f172a;">Yes</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Notes / Concerns</td><td style="padding:7px 0;font-size:13px;color:#0f172a;font-style:italic;">Checking progressive lens power update</td></tr>
+              </table>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="tel:9840123456" style="display:inline-block;background:#fc5a06;color:#ffffff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;margin-right:10px;">
+                      📞 Call Customer
+                    </a>
+                    <a href="https://wa.me/919840123456" style="display:inline-block;background:#25d366;color:#ffffff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;">
+                      💬 Message on WhatsApp
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f8fafc;padding:14px 24px;text-align:center;border-top:1px solid #e2e8f0;font-size:11.5px;color:#64748b;">
+              Darshana Optical Internal Notifications · Harur, Tamil Nadu
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+      },
+      {
+        id: 2,
+        title: "Customer Contact Inquiry Receipt (Customer)",
+        subject: "Thank you for contacting Darshana Optical!",
+        to: "karthik.s@example.com (Customer)",
+        trigger: "User submits contact form on /contact page",
+        html: `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f8fafc;font-family:'Segoe UI',Arial,sans-serif;color:#0f172a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);max-width:100%;">
+          <tr>
+            <td style="background:linear-gradient(135deg, #fc5a06 0%, #ea580c 100%);padding:36px 32px;text-align:center;">
+              <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:800;letter-spacing:-0.4px;">
+                Darshana Optical
+              </h1>
+              <p style="margin:6px 0 0;color:rgba(255,255,255,0.9);font-size:13px;">
+                Eye Care &amp; Premium Eyewear · Harur
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 28px;">
+              <p style="margin:0 0 12px;font-size:16px;color:#0f172a;">
+                Dear <strong>Karthik Subramanian</strong>,
+              </p>
+              <p style="margin:0 0 20px;font-size:14.5px;color:#334155;line-height:1.6;">
+                Thank you for contacting <strong>Darshana Optical</strong>. We have received your inquiry regarding <strong>Progressive Lenses</strong>. Our optometrist or customer support team will be in touch with you shortly.
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:18px;margin-bottom:22px;">
+                <tr><td style="padding:6px 0;font-size:13px;color:#64748b;width:120px;">Inquiry Topic</td><td style="padding:6px 0;font-size:14px;font-weight:700;color:#0f172a;">Progressive Lenses</td></tr>
+                <tr><td style="padding:6px 0;font-size:13px;color:#64748b;">Your Message</td><td style="padding:6px 0;font-size:13.5px;color:#334155;font-style:italic;">"Can you please provide the price range for Zeiss SmartLife progressive lenses?"</td></tr>
+              </table>
+              <p style="margin:0 0 6px;font-size:13.5px;color:#334155;line-height:1.5;">
+                Need immediate optical advice or looking for a specific frame? Feel free to call us directly:
+              </p>
+              <p style="margin:0 0 20px;font-size:13px;color:#334155;line-height:1.5;">
+                📞 <strong>Phone:</strong> <a href="tel:+918870571536" style="color:#fc5a06;text-decoration:none;font-weight:600;">+91 88705 71536</a><br />
+                📍 <strong>Address:</strong> Tvk Nagar, Salem Bypass Road, opposite Vasanth &amp; Co, Harur – 636 903
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="https://wa.me/918870571536?text=Hi%20Darshana%20Optical,%20following%20up%20on%20my%20inquiry" style="display:inline-block;background:#25d366;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;">
+                      💬 Chat on WhatsApp
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f1f5f9;padding:18px 24px;text-align:center;border-top:1px solid #e2e8f0;">
+              <p style="margin:0;font-size:11.5px;color:#64748b;">
+                © 2026 Darshana Optical · Harur, Tamil Nadu<br />
+                <a href="https://darshanaoptical.com" style="color:#fc5a06;text-decoration:none;">darshanaoptical.com</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+      },
+      {
+        id: 3,
+        title: "Customer Contact Inquiry Alert (Shop Owner)",
+        subject: "📩 New Customer Inquiry: Karthik Subramanian (Progressive Lenses)",
+        to: "darshanaoptical31@gmail.com (Shop Owner)",
+        trigger: "User submits contact form on website",
+        html: `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:'Segoe UI',Arial,sans-serif;color:#0f172a;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table width="580" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);max-width:100%;">
+          <tr>
+            <td style="background:#0f172a;padding:26px 30px;border-bottom:4px solid #fc5a06;">
+              <span style="background:#fc5a06;color:#ffffff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.8px;">
+                New Website Inquiry
+              </span>
+              <h1 style="margin:10px 0 0;color:#ffffff;font-size:21px;font-weight:800;">
+                Customer Inquiry Received
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin-bottom:22px;">
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;width:120px;">Name</td><td style="padding:7px 0;font-size:14px;font-weight:700;color:#0f172a;">Karthik Subramanian</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Phone</td><td style="padding:7px 0;font-size:14px;font-weight:700;color:#fc5a06;"><a href="tel:9894012345" style="color:#fc5a06;text-decoration:none;">98940 12345</a></td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Email</td><td style="padding:7px 0;font-size:13px;color:#0f172a;">karthik.s@example.com</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Interest</td><td style="padding:7px 0;font-size:14px;font-weight:600;color:#0f172a;">Progressive Lenses</td></tr>
+                <tr><td style="padding:7px 0;font-size:13px;color:#64748b;">Message</td><td style="padding:7px 0;font-size:14px;color:#334155;line-height:1.5;">Can you please provide the price range for Zeiss SmartLife progressive lenses?</td></tr>
+              </table>
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="tel:9894012345" style="display:inline-block;background:#fc5a06;color:#ffffff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;margin-right:10px;">
+                      📞 Call Customer
+                    </a>
+                    <a href="https://wa.me/919894012345" style="display:inline-block;background:#25d366;color:#ffffff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13.5px;">
+                      💬 Message on WhatsApp
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#f8fafc;padding:14px 24px;text-align:center;border-top:1px solid #e2e8f0;font-size:11.5px;color:#64748b;">
+              Darshana Optical Internal Notifications · Harur
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+      }
+    ];
+
+    let currentIdx = 0;
+
+    function switchTemplate(idx) {
+      currentIdx = idx;
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+      const t = TEMPLATES[idx];
+      document.getElementById('meta-subject').textContent = t.subject;
+      document.getElementById('meta-to').textContent = t.to;
+      document.getElementById('meta-trigger').textContent = t.trigger;
+
+      const frame = document.getElementById('preview-frame');
+      const doc = frame.contentDocument || frame.contentWindow.document;
+      doc.open();
+      doc.write(t.html);
+      doc.close();
+    }
+
+    function setDevice(device) {
+      const wrapper = document.getElementById('frame-wrapper');
+      const isMobile = device === 'mobile';
+      wrapper.classList.toggle('mobile', isMobile);
+      document.getElementById('btn-desktop').classList.toggle('active', !isMobile);
+      document.getElementById('btn-mobile').classList.toggle('active', isMobile);
+    }
+
+    // Initialize with first template
+    switchTemplate(0);
+  </script>
+</body>
+</html>

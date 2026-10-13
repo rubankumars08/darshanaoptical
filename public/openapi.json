@@ -1,0 +1,183 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Darshana Optical API",
+    "version": "1.0.0",
+    "description": "Official Backend API for Darshana Optical (Harur, Tamil Nadu). Powers eye test appointment bookings and customer inquiries stored in TiDB Cloud MySQL."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development Server"
+    },
+    {
+      "url": "https://darshanaoptical.com",
+      "description": "Production Server"
+    }
+  ],
+  "paths": {
+    "/api/appointments": {
+      "get": {
+        "summary": "Get Total Appointments Count",
+        "description": "Returns aggregate count of eye test appointment bookings and verifies database connectivity.",
+        "tags": ["Appointments"],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "count": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "total": { "type": "integer", "example": 12 }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Eye Test Appointment",
+        "description": "Creates a new eye testing appointment booking in the TiDB MySQL database.",
+        "tags": ["Appointments"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "phone"],
+                "properties": {
+                  "name": { "type": "string", "example": "Ramesh Kumar" },
+                  "phone": { "type": "string", "example": "+918870571536" },
+                  "email": { "type": "string", "example": "ramesh@example.com" },
+                  "preferred_date": { "type": "string", "format": "date", "example": "2026-09-10" },
+                  "preferred_time": { "type": "string", "example": "10:30 AM" },
+                  "test_type": { "type": "string", "example": "Comprehensive Eye Test" },
+                  "wears_glasses": { "type": "string", "enum": ["Yes", "No"], "example": "Yes" },
+                  "notes": { "type": "string", "example": "Looking for progressive lenses." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Appointment request saved successfully." },
+                    "id": { "type": "integer", "example": 1 }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required fields (name, phone)"
+          },
+          "500": {
+            "description": "Database connection error"
+          }
+        }
+      }
+    },
+    "/api/inquiries": {
+      "get": {
+        "summary": "Get Total Inquiries Count",
+        "description": "Returns total count of customer product and store inquiries.",
+        "tags": ["Inquiries"],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "count": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "total": { "type": "integer", "example": 25 }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Submit Customer Inquiry",
+        "description": "Submits a new customer inquiry regarding frames, lenses, pricing, or store visits.",
+        "tags": ["Inquiries"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "phone"],
+                "properties": {
+                  "name": { "type": "string", "example": "Priya Sundaram" },
+                  "phone": { "type": "string", "example": "+918870571536" },
+                  "email": { "type": "string", "example": "priya@example.com" },
+                  "interest": { "type": "string", "example": "Progressive Lenses" },
+                  "message": { "type": "string", "example": "Need price details on blue cut progressive glasses." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Inquiry recorded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Inquiry saved successfully." },
+                    "id": { "type": "integer", "example": 1 }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "500": {
+            "description": "Database connection error"
+          }
+        }
+      }
+    }
+  }
+}
