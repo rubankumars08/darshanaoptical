@@ -12,10 +12,12 @@ const db = vi.hoisted(() => ({
   attempts: new Map<string, { attempts: number; last_failed_at: number; locked_until: number | null }>(),
   now: Date.UTC(2026, 0, 1, 12, 0, 0),
   updates: [] as { sql: string; params: any[] }[],
+  error: null as Error | null,
 }));
 
 vi.mock('@/app/lib/db', () => ({
   query: vi.fn(async (sql: string, params: any[] = []) => {
+    if (db.error) throw db.error;
     if (/SELECT locked_until/.test(sql)) {
       const row = db.attempts.get(params[0]);
       if (!row) return [];
@@ -74,6 +76,7 @@ beforeEach(async () => {
   ];
   db.attempts.clear();
   db.updates = [];
+  db.error = null;
   db.now = Date.UTC(2026, 0, 1, 12, 0, 0);
 });
 
@@ -115,6 +118,24 @@ describe('successful sign-in', () => {
 });
 
 describe('failed sign-in', () => {
+  it('rejects malformed JSON with 400', async () => {
+    const request = new Request('http://localhost/api/admin/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{not-json',
+    });
+    const res = await POST(request);
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: 'Invalid JSON body.' });
+  });
+
+  it('reports database configuration failures as a retryable 503', async () => {
+    db.error = new Error('[db] DATABASE_URL environment variable is not set.');
+    const res = await POST(loginRequest({ email: 'admin@darshana.com', password: GOOD }));
+    expect(res.status).toBe(503);
+    expect(await res.json()).toMatchObject({ code: 'DATABASE_UNAVAILABLE' });
+  });
+
   it('rejects a wrong password without a cookie', async () => {
     const res = await POST(loginRequest({ email: 'admin@darshana.com', password: 'wrong' }));
     expect(res.status).toBe(401);

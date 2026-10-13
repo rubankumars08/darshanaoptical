@@ -15,14 +15,33 @@ const DUMMY_HASH =
 // response cannot be used to enumerate which staff emails exist.
 const GENERIC_ERROR = 'Invalid email or password.';
 
+export const runtime = 'nodejs';
+
+function isDatabaseError(error: unknown): boolean {
+  if (!(error instanceof Error)) return false;
+
+  const code = 'code' in error ? String(error.code) : '';
+  return (
+    ['ECONNREFUSED', 'ENOTFOUND', 'ETIMEDOUT', 'PROTOCOL_CONNECTION_LOST', 'ER_NO_SUCH_TABLE', 'ER_BAD_FIELD_ERROR'].includes(code) ||
+    error.message.includes('DATABASE_URL')
+  );
+}
+
 export async function POST(request: Request) {
   const ip = clientIp(request);
   let email = '';
+  let body: unknown;
 
   try {
-    const body = await request.json();
-    email = typeof body?.email === 'string' ? body.email.toLowerCase().trim() : '';
-    const password = typeof body?.password === 'string' ? body.password : '';
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 });
+  }
+
+  try {
+    const credentials = body as { email?: unknown; password?: unknown } | null;
+    email = typeof credentials?.email === 'string' ? credentials.email.toLowerCase().trim() : '';
+    const password = typeof credentials?.password === 'string' ? credentials.password : '';
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password required.' }, { status: 400 });
@@ -84,6 +103,12 @@ export async function POST(request: Request) {
     return res;
   } catch (err: unknown) {
     console.error('[admin/auth/login]', err);
+    if (isDatabaseError(err)) {
+      return NextResponse.json(
+        { error: 'Login service is temporarily unavailable.', code: 'DATABASE_UNAVAILABLE' },
+        { status: 503, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
     return NextResponse.json({ error: 'Server error.' }, { status: 500 });
   }
 }
