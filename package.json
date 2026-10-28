@@ -13,6 +13,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "db:migrate": "node db/migrate.mjs",
+    "db:reset": "node db/reset.mjs --confirm-reset=darshana_optical",
+    "db:seed": "node db/seed.mjs",
     "db:migrate:security": "node db/migrate_security.mjs"
   },
   "dependencies": {
