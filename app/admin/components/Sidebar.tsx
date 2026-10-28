@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/app/lib/admin/auth-context';
 import {
-  LayoutDashboard, Users, Eye, ShoppingCart, CreditCard, Package, Boxes, Truck, ShoppingBag, DollarSign, Settings, Users2, ClipboardList, BarChart2, LogOut, ChevronRight, CalendarCheck, ScrollText,
+  LayoutDashboard, Users, Eye, ShoppingCart, CreditCard, Package, Boxes, Truck, ShoppingBag, DollarSign, Settings, Users2, ClipboardList, BarChart2, LogOut, ChevronRight, CalendarCheck, ScrollText, Zap,
 } from 'lucide-react';
 import type { Role } from '@/app/lib/admin/types';
 
@@ -25,30 +25,40 @@ const iconSize = { width: 15, height: 15 };
 
 const NAV: NavSection[] = [
   {
-    title: 'Daily Counter',
+    title: 'Today',
     items: [
       { label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
-      { label: 'Billing / POS', href: '/admin/pos', icon: <ShoppingCart {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
-      { label: 'Website Bookings', href: '/admin/bookings', icon: <CalendarCheck {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
+      { label: 'Express Sale', href: '/admin/counter', icon: <Zap {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
+      { label: 'Full Billing', href: '/admin/pos', icon: <ShoppingCart {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
+      { label: 'Bookings', href: '/admin/bookings', icon: <CalendarCheck {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
+    ],
+  },
+  {
+    title: 'Customers',
+    items: [
       { label: 'Customers', href: '/admin/customers', icon: <Users {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
       { label: 'Eye Tests', href: '/admin/eye-tests', icon: <Eye {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
-      { label: 'Orders & Fitting', href: '/admin/orders', icon: <ClipboardList {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
-      { label: 'Pending Payments', href: '/admin/payments', icon: <CreditCard {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
-      { label: 'Products & Stock', href: '/admin/products', icon: <Package {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
-      // The stock screen existed but was never linked, so nobody could reach it.
+      { label: 'Orders', href: '/admin/orders', icon: <ClipboardList {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
+      { label: 'Payments', href: '/admin/payments', icon: <CreditCard {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
+    ],
+  },
+  {
+    title: 'Stock',
+    items: [
+      { label: 'Products', href: '/admin/products', icon: <Package {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
       { label: 'Stock In / Out', href: '/admin/inventory', icon: <Boxes {...iconSize} />, roles: ['admin', 'manager', 'staff'] },
     ],
   },
   {
-    title: 'Shop Management',
+    title: 'Management',
     items: [
-      { label: 'Purchases & Suppliers', href: '/admin/purchases', icon: <ShoppingBag {...iconSize} />, roles: ['admin', 'manager'] },
+      { label: 'Purchases', href: '/admin/purchases', icon: <ShoppingBag {...iconSize} />, roles: ['admin', 'manager'] },
       { label: 'Suppliers', href: '/admin/suppliers', icon: <Truck {...iconSize} />, roles: ['admin', 'manager'] },
       { label: 'Expenses', href: '/admin/expenses', icon: <DollarSign {...iconSize} />, roles: ['admin', 'manager'] },
-      { label: 'Daily Reports', href: '/admin/reports', icon: <BarChart2 {...iconSize} />, roles: ['admin', 'manager'] },
-      { label: 'Staff Team', href: '/admin/staff', icon: <Users2 {...iconSize} />, roles: ['admin'] },
+      { label: 'Reports', href: '/admin/reports', icon: <BarChart2 {...iconSize} />, roles: ['admin', 'manager'] },
+      { label: 'Staff', href: '/admin/staff', icon: <Users2 {...iconSize} />, roles: ['admin'] },
       { label: 'Audit Log', href: '/admin/audit', icon: <ScrollText {...iconSize} />, roles: ['admin', 'manager'] },
-      { label: 'Shop Settings', href: '/admin/settings', icon: <Settings {...iconSize} />, roles: ['admin'] },
+      { label: 'Settings', href: '/admin/settings', icon: <Settings {...iconSize} />, roles: ['admin'] },
     ],
   },
 ];

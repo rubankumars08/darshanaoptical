@@ -3,6 +3,7 @@
 import { use } from 'react';
 import Link from 'next/link';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
+import AdminLoader from '../../components/AdminLoader';
 import { ArrowLeft, Printer, ShoppingCart } from 'lucide-react';
 
 export default function PrescriptionPage({ params }: { params: Promise<{ id: string }> }) {
@@ -10,7 +11,7 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
   const { data, loading } = useAdminFetch<{ eyeTest: any }>(`/api/admin/eye-tests/${id}`);
   const test = data?.eyeTest;
 
-  if (loading) return <div style={{ padding: 32, color: '#94a3b8' }}>Loading prescription…</div>;
+  if (loading) return <AdminLoader label="Loading prescription" />;
   if (!test) return <div style={{ padding: 32, color: '#ef4444' }}>Prescription not found.</div>;
 
   const eyeRows = ['sph', 'cyl', 'axis', 'add', 'pd'];
@@ -18,8 +19,8 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
   const LE = [test.le_sph, test.le_cyl, test.le_axis, test.le_add, test.le_pd];
 
   return (
-    <div style={{ maxWidth: 680 }}>
-      <div className="adm-page-header">
+    <div className="adm-print-page adm-prescription-page" data-print-mode="prescription">
+      <div className="adm-page-header adm-no-print">
         <Link href="/admin/eye-tests" className="adm-btn adm-btn-ghost adm-btn-sm">
           <ArrowLeft width={14} height={14} /> Eye Tests
         </Link>
@@ -27,7 +28,7 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
           <div className="adm-page-title">Prescription</div>
           <div className="adm-page-sub">{test.customer_name} · {new Date(test.test_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div className="adm-prescription-actions">
           <button onClick={() => window.print()} className="adm-btn adm-btn-secondary adm-btn-sm">
             <Printer width={13} height={13} /> Print
           </button>
@@ -37,15 +38,15 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
         </div>
       </div>
 
-      <div className="adm-card">
+      <div className="adm-card adm-print-sheet print-section print-prescription">
         {/* Header */}
-        <div style={{ padding: '24px 28px', borderBottom: '2px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div>
+        <div className="adm-prescription-header">
+          <div className="adm-prescription-patient">
             <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>Prescription</div>
             <div style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>{test.customer_name}</div>
             <div style={{ fontSize: 13.5, color: '#64748b', marginTop: 4 }}>{test.customer_phone}</div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div className="adm-prescription-shop">
             <div style={{ fontSize: 22, fontWeight: 800, color: '#0f172a' }}>Darshana Optical</div>
             <div style={{ fontSize: 12.5, color: '#94a3b8' }}>Harur, Tamil Nadu</div>
             <div style={{ fontSize: 12.5, color: '#94a3b8' }}>{new Date(test.test_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
@@ -53,8 +54,9 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* Prescription Table */}
-        <div style={{ padding: 28 }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 20 }}>
+        <div className="adm-prescription-body">
+          <div className="adm-prescription-grid-wrap">
+          <table className="adm-prescription-grid">
             <thead>
               <tr style={{ background: '#f8fafc' }}>
                 <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: 12, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '2px solid #e2e8f0' }}>Eye</th>
@@ -79,10 +81,11 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
               ))}
             </tbody>
           </table>
+          </div>
 
           {/* VA */}
           {(test.visual_acuity_right || test.visual_acuity_left) && (
-            <div style={{ display: 'flex', gap: 20, marginBottom: 16, padding: '14px 16px', background: '#f8fafc', borderRadius: 10 }}>
+            <div className="adm-prescription-va">
               <div><span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600 }}>VA Right: </span><strong>{test.visual_acuity_right ?? '—'}</strong></div>
               <div><span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600 }}>VA Left: </span><strong>{test.visual_acuity_left ?? '—'}</strong></div>
             </div>
@@ -103,7 +106,7 @@ export default function PrescriptionPage({ params }: { params: Promise<{ id: str
             </div>
           )}
 
-          <div style={{ marginTop: 28, paddingTop: 16, borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', fontSize: 12.5, color: '#94a3b8' }}>
+          <div className="adm-prescription-footer">
             <span>Tested by: <strong style={{ color: '#475569' }}>{test.tested_by}</strong></span>
             <span>Darshana Optical — Harur</span>
           </div>

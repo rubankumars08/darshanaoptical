@@ -5,6 +5,7 @@ import { useAuth } from '@/app/lib/admin/auth-context';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPost, adminPut } from '@/app/lib/admin/api';
 import { Plus, X, Edit2, Save } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 const BLANK = {
   name: '', contact_person: '', phone: '', email: '', address: '', gst: '', status: 'active',
@@ -112,6 +113,8 @@ export default function SuppliersPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useAuth } from '@/app/lib/admin/auth-context';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPost } from '@/app/lib/admin/api';
 import { AlertTriangle, ArrowDownToLine, Package, Plus, X } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
 
@@ -211,6 +212,7 @@ export default function InventoryPage() {
           </tbody>
         </table>
       </div>
+      <TablePagination />
 
       {/* Recent movements */}
       <div style={{ fontWeight: 700, marginBottom: 8 }}>Recent stock activity</div>
@@ -234,6 +236,7 @@ export default function InventoryPage() {
           </tbody>
         </table>
       </div>
+      <TablePagination />
     </div>
   );
 }

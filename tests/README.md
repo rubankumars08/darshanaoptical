@@ -3,6 +3,7 @@
 ```bash
 npm test             # run everything once
 npm run test:watch   # re-run on change
+npm run test:e2e     # run real-browser flows (requires E2E_* credentials)
 npx vitest run tests/integration/invoices.test.ts   # one file
 npx vitest run -t "discount"                        # one pattern
 ```
@@ -57,10 +58,32 @@ fails 2 authorization cases, and restoring the `password: z.string().min(1)`
 rule fails 8 staff cases. If you change a security rule and nothing goes red,
 the coverage is missing — add it.
 
+## Browser / End-to-End Coverage (Playwright)
+
+```bash
+npm run test:e2e          # Run all Playwright E2E suites (headless)
+npm run test:e2e:headed   # Run Playwright with visible browser window
+npx playwright show-report # View latest interactive HTML test report
+```
+
+Playwright tests all roles and workflows using the seeded accounts:
+- **Admin**: `admin@darshana.com` (`admin@2026`)
+- **Manager**: `manager@darshana.com` (`manager@2026`)
+- **Staff**: `staff@darshana.com` (`staff@2026`)
+
+(Custom credentials can also be provided via `E2E_ADMIN_EMAIL`, `E2E_ADMIN_PASSWORD`, etc.)
+
+Suites included under `tests/e2e/`:
+- `auth.spec.ts`: Login page rendering, invalid credentials error states, password visibility toggle, unauthenticated route redirection.
+- `admin-role.spec.ts`: Full Admin access to all 17 navigation modules, Staff team management, Shop settings, Audit logs, Reports, and clean logout.
+- `manager-role.spec.ts`: Manager access to reports, purchases, suppliers, expenses, and verification that Staff & Settings are strictly blocked.
+- `staff-role.spec.ts`: Staff access to POS billing, bookings, products, customers, and verification of zero access to management/settings tools.
+- `e2e-flows.spec.ts`: Public website navigation, eye test booking page, and role isolation across sequential logins.
+- `admin-flow.spec.ts`: Protected eye-test API checks, operational screen load verifications, mobile and tablet responsive layouts.
+
 ## Not covered
 
-- Browser/end-to-end flows (no Playwright).
-- React components and rendering.
+- Pixel-level visual regression snapshots.
 - Real SQL. The fakes reproduce the semantics the code depends on — including
   MySQL evaluating `ON DUPLICATE KEY UPDATE` assignments left to right — but a
   schema change can still break production while these pass. Run

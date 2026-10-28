@@ -7,6 +7,7 @@ import { BookingProvider } from "./components/booking/BookingContext";
 import BookingModal from "./components/booking/BookingModal";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import LocalBusinessSchema from "./components/seo/LocalBusinessSchema";
+import MobileActionDock from "./components/layout/MobileActionDock";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -109,6 +110,7 @@ export default function RootLayout({
         <BookingProvider>
           {children}
           <BookingModal />
+          <MobileActionDock />
         </BookingProvider>
       </body>
       <GoogleAnalytics gaId="G-10ZFZ1TVTY" />

@@ -19,23 +19,33 @@ export default function ContactPage() {
   const [interest, setInterest] = useState("Eye Test");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-
-    // Save inquiry to TiDB MySQL Database
-    fetch("/api/inquiries", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        phone,
-        email: email || null,
-        interest,
-        message: message || null,
-      }),
-    }).catch((err) => console.error("Database save error:", err));
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          email: email || null,
+          interest,
+          message: message || null,
+        }),
+      });
+      if (!response.ok) throw new Error("Inquiry request failed");
+      setSubmitted(true);
+    } catch {
+      setSubmitError("We couldn't send your enquiry. Check your connection and try again.");
+      return;
+    } finally {
+      setSubmitting(false);
+    }
 
     const formattedMsg = encodeURIComponent(
       `Hello Darshana Optical,\n\nNew Website Inquiry:\n` +
@@ -48,7 +58,7 @@ export default function ContactPage() {
     );
 
     setTimeout(() => {
-      window.open(`https://wa.me/918870571536?text=${formattedMsg}`, "_blank");
+      window.location.assign(`https://wa.me/918870571536?text=${formattedMsg}`);
     }, 1000);
   };
 
@@ -249,6 +259,11 @@ export default function ContactPage() {
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
+                      {submitError && (
+                        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                          {submitError}
+                        </div>
+                      )}
                       <div>
                         <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1">
                           Name *
@@ -322,9 +337,10 @@ export default function ContactPage() {
 
                       <button
                         type="submit"
-                        className="w-full btn-primary justify-center font-bold gap-2 text-base shadow-lg shadow-brand-orange/20 cursor-pointer"
+                        disabled={submitting}
+                        className="w-full btn-primary justify-center font-bold gap-2 text-base shadow-lg shadow-brand-orange/20 cursor-pointer disabled:cursor-wait disabled:opacity-60"
                       >
-                        <Send size={18} /> Send Enquiry
+                        <Send size={18} /> {submitting ? "Sending..." : "Send Enquiry"}
                       </button>
                     </form>
                   </>

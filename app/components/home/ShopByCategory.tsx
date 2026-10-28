@@ -39,7 +39,7 @@ export default function ShopByCategory() {
       <div className="container-brand space-y-8">
         {/* Section Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 tracking-tight [text-wrap:balance]">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 tracking-tight text-balance">
             Find glasses for everyone
           </h2>
           <Link
@@ -58,7 +58,7 @@ export default function ShopByCategory() {
         <motion.div
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, margin: "-40px" }}
           variants={{
             hidden: { opacity: 0 },
             show: {
@@ -82,7 +82,7 @@ export default function ShopByCategory() {
             >
               <Link
                 href="/frames"
-                className="group relative block overflow-hidden rounded-2xl border border-neutral-200/80 bg-neutral-100 shadow-2xs transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 hover:border-brand-orange/40"
+                className="group relative block overflow-hidden rounded-2xl border border-neutral-200/80 bg-neutral-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 hover:border-brand-orange/40"
               >
                 <div className="relative aspect-3/4 w-full overflow-hidden bg-neutral-100">
                   <Image

@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/app/lib/admin/auth-context';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
+import AdminLoader from '../components/AdminLoader';
+import TablePagination from '../components/TablePagination';
 import {
-  TrendingUp, Users, Eye, ShoppingCart, AlertTriangle, Package, ArrowRight,
-  CheckCircle, Clock, IndianRupee, Receipt, RefreshCw, Zap, UserPlus,
+  TrendingUp, Eye, AlertTriangle, ArrowRight,
+  CheckCircle, Clock, IndianRupee, Receipt, RefreshCw, Zap, UserPlus, CalendarCheck,
 } from 'lucide-react';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
@@ -31,58 +33,58 @@ export default function DashboardPage() {
 
   if (!user) return null;
 
-  if (loading || !data) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 300, color: '#94a3b8' }}>
-        <RefreshCw size={20} style={{ animation: 'spin 0.8s linear infinite', marginRight: 8 }} />
-        Loading dashboard…
-      </div>
-    );
-  }
+  if (loading || !data) return <AdminLoader label="Preparing today's dashboard" />;
 
   const today = data.today ?? {};
   const month = data.month ?? {};
   const monthExp = data.month_expenses?.total ?? 0;
 
   return (
-    <div>
+    <section className="adm-dashboard">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div className="adm-dashboard-welcome">
         <div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: '#0f172a' }}>
+          <h1>
             Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}, {user.name.split(' ')[0]} 👋
-          </div>
-          <div style={{ fontSize: 13, color: '#94a3b8', marginTop: 2 }}>
+          </h1>
+          <p>
             {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-          </div>
+          </p>
         </div>
         <button onClick={refetch} className="adm-btn adm-btn-ghost adm-btn-sm" title="Refresh">
           <RefreshCw width={14} height={14} />
         </button>
       </div>
 
+      <div className="adm-quick-actions" aria-label="Common tasks">
+        <Link href="/admin/counter" className="is-primary"><Zap /> <span>New sale</span></Link>
+        <Link href="/admin/customers/new"><UserPlus /> <span>New customer</span></Link>
+        <Link href="/admin/eye-tests/new"><Eye /> <span>New eye test</span></Link>
+        <Link href="/admin/bookings"><CalendarCheck /> <span>Bookings</span></Link>
+      </div>
+
       {/* Today KPIs */}
       <div className="adm-grid-4" style={{ marginBottom: 20 }}>
         {[
-          { label: "Today's Sales", value: fmt(today.total ?? 0), sub: `${today.count ?? 0} invoices`, icon: IndianRupee, color: '#fc5a06' },
-          { label: 'Collected Today', value: fmt(today.paid ?? 0), sub: `Balance: ${fmt(today.balance ?? 0)}`, icon: CheckCircle, color: '#16a34a' },
-          { label: 'New Customers', value: data.new_customers_today ?? 0, sub: 'registered today', icon: UserPlus, color: '#2563eb' },
-          { label: "Month's Sales", value: fmt(month.total ?? 0), sub: `${month.count ?? 0} invoices`, icon: TrendingUp, color: '#7c3aed' },
+          { label: "Today's sales", value: fmt(today.total ?? 0), sub: `${today.count ?? 0} invoices`, icon: IndianRupee },
+          { label: 'Collected today', value: fmt(today.paid ?? 0), sub: `Balance: ${fmt(today.balance ?? 0)}`, icon: CheckCircle },
+          { label: 'New customers', value: data.new_customers_today ?? 0, sub: 'registered today', icon: UserPlus },
+          { label: "Month's sales", value: fmt(month.total ?? 0), sub: `${month.count ?? 0} invoices`, icon: TrendingUp },
         ].map((k) => (
-          <div key={k.label} className="adm-stat" style={{ borderLeft: `3px solid ${k.color}` }}>
+          <article key={k.label} className="adm-stat adm-dashboard-stat">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
               <div className="adm-stat-label">{k.label}</div>
-              <k.icon size={16} style={{ color: k.color, opacity: 0.7 }} />
+              <span className="adm-dashboard-stat-icon"><k.icon size={16} /></span>
             </div>
-            <div className="adm-stat-value" style={{ fontSize: 22, color: k.color }}>{k.value}</div>
+            <div className="adm-stat-value">{k.value}</div>
             <div style={{ fontSize: 11.5, color: '#94a3b8', marginTop: 2 }}>{k.sub}</div>
-          </div>
+          </article>
         ))}
       </div>
 
       <div className="adm-grid-2" style={{ marginBottom: 20 }}>
         {/* Pending Orders */}
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0', padding: '16px 20px' }}>
+        <article className="adm-dashboard-panel">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ fontWeight: 700, fontSize: 13.5, color: '#0f172a' }}>
               <Clock size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />
@@ -99,11 +101,11 @@ export default function DashboardPage() {
               <Badge status={inv.order_status} />
             </div>
           ))}
-          {!data.pending_orders?.length && <div style={{ color: '#94a3b8', fontSize: 13, textAlign: 'center', padding: 12 }}>No pending orders 🎉</div>}
-        </div>
+          {!data.pending_orders?.length && <div className="adm-dashboard-empty">No pending orders</div>}
+        </article>
 
         {/* Low Stock */}
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0', padding: '16px 20px' }}>
+        <article className="adm-dashboard-panel">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ fontWeight: 700, fontSize: 13.5, color: '#0f172a' }}>
               <AlertTriangle size={14} style={{ marginRight: 6, verticalAlign: 'middle', color: '#d97706' }} />
@@ -124,14 +126,14 @@ export default function DashboardPage() {
             </div>
           ))}
           {!data.low_stock?.length && !data.out_of_stock?.length && (
-            <div style={{ color: '#94a3b8', fontSize: 13, textAlign: 'center', padding: 12 }}>All items well-stocked 👍</div>
+            <div className="adm-dashboard-empty">Inventory levels look healthy</div>
           )}
-        </div>
+        </article>
       </div>
 
       {/* Pending Payments */}
       {(data.pending_payments?.length ?? 0) > 0 && (
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e2e8f0', padding: '16px 20px' }}>
+        <article className="adm-dashboard-panel">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ fontWeight: 700, fontSize: 13.5, color: '#0f172a' }}>
               <Receipt size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />
@@ -156,10 +158,10 @@ export default function DashboardPage() {
               </tbody>
             </table>
           </div>
-        </div>
+          <TablePagination />
+        </article>
       )}
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-    </div>
+    </section>
   );
 }

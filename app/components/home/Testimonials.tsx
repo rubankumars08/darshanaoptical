@@ -52,7 +52,7 @@ export default function Testimonials() {
   const currentReview = REVIEWS[currentIndex];
 
   return (
-    <section className="bg-white py-12 sm:py-16 border-t border-neutral-100">
+    <section id="testimonials" className="bg-white py-12 sm:py-16 border-t border-neutral-100">
       <div className="container-brand space-y-8">
         {/* Section Header */}
         <div className="flex items-center justify-between">

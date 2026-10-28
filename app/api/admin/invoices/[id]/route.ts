@@ -12,7 +12,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   if (!invoice) return NextResponse.json({ error: 'Not found.' }, { status: 404 });
   const items = await query('SELECT * FROM invoice_items WHERE invoice_id = ?', [id]);
   const payments = await query('SELECT * FROM payments WHERE invoice_id = ? ORDER BY created_at', [id]);
-  return NextResponse.json({ invoice, items, payments });
+  const [settings] = await query('SELECT * FROM shop_settings WHERE id=1') as any[];
+  const [eyeTest] = invoice.eye_test_id
+    ? await query('SELECT * FROM eye_tests WHERE id = ? LIMIT 1', [invoice.eye_test_id]) as any[]
+    : [];
+  return NextResponse.json({ invoice, items, payments, settings: settings ?? {}, eyeTest: eyeTest ?? null });
 }
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {

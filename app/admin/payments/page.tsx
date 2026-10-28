@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPut } from '@/app/lib/admin/api';
 import { CheckCircle } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
 
@@ -109,6 +110,8 @@ export default function PaymentsPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

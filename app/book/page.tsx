@@ -41,27 +41,40 @@ export default function DedicatedBookPage() {
   const [wearsGlasses, setWearsGlasses] = useState("Yes");
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-
-    // Save appointment request to TiDB MySQL Database
-    fetch("/api/appointments", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        phone,
-        email: email || null,
-        preferred_date: date || null,
-        preferred_time: selectedTime,
-        test_type: reason,
-        wears_glasses: wearsGlasses,
-        notes: notes || null,
-      }),
-    }).catch((err) => console.error("Database save error:", err));
+    setSubmitError("");
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          email: email || null,
+          preferred_date: date || null,
+          preferred_time: selectedTime,
+          test_type: reason,
+          wears_glasses: wearsGlasses,
+          notes: notes || null,
+        }),
+      });
+      if (!response.ok) throw new Error("Appointment request failed");
+      setSubmitted(true);
+    } catch {
+      setSubmitError("We couldn't save your appointment. Check your connection and try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const localToday = new Date();
+  localToday.setMinutes(localToday.getMinutes() - localToday.getTimezoneOffset());
+  const todayStr = localToday.toISOString().split("T")[0];
 
   const handleWhatsAppConfirm = () => {
     const msg = encodeURIComponent(
@@ -110,6 +123,11 @@ export default function DedicatedBookPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {submitError && (
+                    <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                      {submitError}
+                    </div>
+                  )}
                   {/* Your Details */}
                   <div className="space-y-4">
                     <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-400 border-b border-neutral-100 pb-2">
@@ -141,6 +159,10 @@ export default function DedicatedBookPage() {
                           placeholder="e.g. +91 88705 71536"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
+                          pattern="[6-9][0-9]{9}"
+                          minLength={10}
+                          maxLength={10}
+                          title="Enter a valid 10-digit Indian mobile number"
                           className="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 px-4 text-sm text-neutral-900 focus:border-brand-orange focus:bg-white focus:outline-none"
                         />
                       </div>
@@ -174,6 +196,7 @@ export default function DedicatedBookPage() {
                         type="date"
                         required
                         value={date}
+                        min={todayStr}
                         onChange={(e) => setDate(e.target.value)}
                         className="w-full sm:w-1/2 rounded-xl border border-neutral-200 bg-neutral-50 py-3 px-4 text-sm text-neutral-900 focus:border-brand-orange focus:bg-white focus:outline-none"
                       />
@@ -265,9 +288,10 @@ export default function DedicatedBookPage() {
                   <div className="pt-4">
                     <button
                       type="submit"
-                      className="w-full btn-primary justify-center font-bold text-base py-4 shadow-xl shadow-brand-orange/25 cursor-pointer"
+                      disabled={submitting}
+                      className="w-full btn-primary justify-center font-bold text-base py-4 shadow-xl shadow-brand-orange/25 cursor-pointer disabled:cursor-wait disabled:opacity-60"
                     >
-                      Request Appointment
+                      {submitting ? "Saving appointment..." : "Request Appointment"}
                     </button>
                   </div>
                 </form>

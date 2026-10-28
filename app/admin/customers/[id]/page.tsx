@@ -8,6 +8,7 @@ import {
   ArrowLeft, Eye, ShoppingCart, Phone, Mail, MapPin, Calendar, Edit2, Save, X,
   Receipt, FileText,
 } from 'lucide-react';
+import TablePagination from '../../components/TablePagination';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
 function fmtDate(d: string) { return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); }
@@ -141,6 +142,7 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
       </div>
 
       {tab === 'eyetests' && (
+        <>
         <div className="adm-table-wrap">
           <table className="adm-table">
             <thead><tr><th>Date</th><th>RE SPH/CYL/AXIS</th><th>LE SPH/CYL/AXIS</th><th>Tested By</th><th>Recommendation</th></tr></thead>
@@ -158,9 +160,12 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             </tbody>
           </table>
         </div>
+        <TablePagination />
+        </>
       )}
 
       {tab === 'invoices' && (
+        <>
         <div className="adm-table-wrap">
           <table className="adm-table">
             <thead><tr><th>Invoice</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th>Date</th><th></th></tr></thead>
@@ -180,6 +185,8 @@ export default function CustomerDetailPage({ params }: { params: Promise<{ id: s
             </tbody>
           </table>
         </div>
+        <TablePagination />
+        </>
       )}
     </div>
   );

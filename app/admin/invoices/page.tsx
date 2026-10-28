@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
+import TablePagination from '../components/TablePagination';
 import { Search } from 'lucide-react';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
@@ -83,6 +84,8 @@ export default function InvoicesPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

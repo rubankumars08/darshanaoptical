@@ -5,6 +5,7 @@ import { useAuth } from '@/app/lib/admin/auth-context';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPost, adminDelete } from '@/app/lib/admin/api';
 import { Plus, X, Trash2 } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
 
@@ -135,6 +136,8 @@ export default function ExpensesPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

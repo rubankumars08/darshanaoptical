@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Clock, User, Phone, Mail, Check, Send, Sparkles, MapPin, ArrowRight, ArrowLeft } from "lucide-react";
 import { useBooking } from "./BookingContext";
@@ -16,28 +16,50 @@ export default function BookingModal() {
   const [time, setTime] = useState("10:00 AM");
   const [testType, setTestType] = useState("Comprehensive Eye Test");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const today = new Date();
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  const todayStr = today.toISOString().split("T")[0];
 
-  const handleNext = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError("");
     if (step < 3) {
       setStep((prev) => prev + 1);
     } else {
-      setIsSuccess(true);
-      // Persist appointment to TiDB MySQL Database
-      fetch("/api/appointments", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          phone,
-          email: email || null,
-          preferred_date: date || null,
-          preferred_time: time,
-          test_type: testType,
-        }),
-      }).catch((err) => console.error("Database save error:", err));
+      setIsSubmitting(true);
+      try {
+        const response = await fetch("/api/appointments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            email: email || null,
+            preferred_date: date || null,
+            preferred_time: time,
+            test_type: testType,
+          }),
+        });
+        if (!response.ok) throw new Error("Appointment request failed");
+        setIsSuccess(true);
+      } catch {
+        setSubmitError("We couldn't save your appointment. Check your connection and try again.");
+        return;
+      } finally {
+        setIsSubmitting(false);
+      }
 
       const message = encodeURIComponent(
         `Hello Darshana Optical,\n\nI would like to book an Eye Test appointment.\n\n` +
@@ -50,18 +72,22 @@ export default function BookingModal() {
         `Please confirm my booking.`
       );
       setTimeout(() => {
-        window.open(`https://wa.me/918870571536?text=${message}`, "_blank");
-      }, 1500);
+        window.location.assign(`https://wa.me/918870571536?text=${message}`);
+      }, 900);
     }
   };
 
   const handleReset = () => {
     setIsSuccess(false);
+    setIsSubmitting(false);
     setStep(1);
     setName("");
     setPhone("");
     setEmail("");
     setDate("");
+    setTime("10:00 AM");
+    setTestType("Comprehensive Eye Test");
+    setSubmitError("");
     closeBooking();
   };
 
@@ -74,7 +100,9 @@ export default function BookingModal() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={closeBooking}
+            onClick={() => {
+              if (!isSubmitting) handleReset();
+            }}
             className="fixed inset-0 bg-neutral-950/70 backdrop-blur-md"
           />
 
@@ -88,7 +116,8 @@ export default function BookingModal() {
           >
             {/* Close Button */}
             <button
-              onClick={closeBooking}
+              onClick={handleReset}
+              disabled={isSubmitting}
               className="absolute top-5 right-5 flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-900 transition-colors cursor-pointer z-10"
               aria-label="Close modal"
             >
@@ -144,6 +173,11 @@ export default function BookingModal() {
                 </div>
 
                 <form onSubmit={handleNext}>
+                  {submitError && (
+                    <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                      {submitError}
+                    </div>
+                  )}
                   <AnimatePresence mode="wait">
                     {step === 1 && (
                       <motion.div
@@ -337,9 +371,10 @@ export default function BookingModal() {
                           </button>
                           <button
                             type="submit"
-                            className="flex-1 btn-primary flex items-center justify-center gap-2 text-sm font-bold shadow-lg shadow-brand-orange/20 cursor-pointer"
+                            disabled={isSubmitting}
+                            className="flex-1 btn-primary flex items-center justify-center gap-2 text-sm font-bold shadow-lg shadow-brand-orange/20 cursor-pointer disabled:cursor-wait disabled:opacity-60"
                           >
-                            <Send size={16} /> Confirm & Book Via WhatsApp
+                            <Send size={16} /> {isSubmitting ? "Saving..." : "Confirm & Book Via WhatsApp"}
                           </button>
                         </div>
                       </motion.div>

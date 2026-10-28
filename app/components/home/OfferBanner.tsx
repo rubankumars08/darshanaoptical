@@ -13,7 +13,7 @@ export default function OfferBanner() {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, ease: EASE_STANDARD }}
           whileHover={{ y: -4, transition: { duration: 0.25 } }}
           className="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#ff4500] via-[#fc5a06] to-[#ff6a1a] shadow-xl text-white group"
@@ -31,7 +31,7 @@ export default function OfferBanner() {
                 <span>STORE OFFER</span>
               </motion.span>
 
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight [text-wrap:balance]">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight text-balance">
                 Computer Glasses <br />
                 Starting From <span className="tabular-nums">₹1,499*</span>
               </h2>

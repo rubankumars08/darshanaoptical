@@ -77,6 +77,7 @@ export default function LoginPage() {
             </div>
           )}
 
+
           <div>
             <label style={{ display: 'block', fontSize: 12.5, fontWeight: 600, color: '#cbd5e1', marginBottom: 7, letterSpacing: '0.02em' }}>
               Email Address

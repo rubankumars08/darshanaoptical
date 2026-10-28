@@ -5,6 +5,7 @@ import { useAuth } from '@/app/lib/admin/auth-context';
 import { adminPost, adminPut } from '@/app/lib/admin/api';
 import { useState } from 'react';
 import { Plus, Save, X } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
 
@@ -134,6 +135,8 @@ export default function PurchasesPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

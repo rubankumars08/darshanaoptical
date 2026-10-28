@@ -22,7 +22,7 @@ export default function ProgressiveLens() {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, ease: EASE_STANDARD }}
           className="overflow-hidden rounded-3xl bg-[#1a1b1f] text-white p-8 sm:p-12 lg:p-14 shadow-2xl border border-neutral-800"
         >

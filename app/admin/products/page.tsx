@@ -6,6 +6,7 @@ import { useAuth } from '@/app/lib/admin/auth-context';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPost, adminPut } from '@/app/lib/admin/api';
 import { Plus, Edit2, X, Save, Upload, Trash2, Loader2, Search, Image as ImageIcon } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 function fmt(n: number) { return '₹' + Number(n).toLocaleString('en-IN'); }
 
@@ -377,6 +378,7 @@ export default function ProductsPage() {
           </tbody>
         </table>
       </div>
+      <TablePagination />
     </div>
   );
 }

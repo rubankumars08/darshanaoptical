@@ -31,16 +31,9 @@ function isLinkActive(pathname: string, href: string, activeMatch?: string[]) {
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [lastPathname, setLastPathname] = useState<string | null>(null);
   const { scrollY } = useScroll();
   const pathname = usePathname();
   const { openBooking } = useBooking();
-
-  // Close mobile menu on route change
-  if (pathname !== lastPathname) {
-    setLastPathname(pathname);
-    if (mobileMenuOpen) setMobileMenuOpen(false);
-  }
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled((prev) => {
@@ -53,9 +46,10 @@ export default function Header() {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
+      const previousOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
-        document.body.style.overflow = "";
+        document.body.style.overflow = previousOverflow;
       };
     }
   }, [mobileMenuOpen]);
@@ -161,6 +155,7 @@ export default function Header() {
                   <Link
                     key={href}
                     href={href}
+                    onClick={() => setMobileMenuOpen(false)}
                     className={`rounded-lg px-2 py-3 text-base font-semibold transition-colors ${
                       active
                         ? "text-brand-orange"

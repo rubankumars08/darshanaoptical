@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPut } from '@/app/lib/admin/api';
 import { Phone, Search } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 type OrderStatus = 'new' | 'lens_ordered' | 'in_process' | 'ready' | 'delivered' | 'cancelled';
 
@@ -98,6 +99,8 @@ export default function OrdersPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { Search, Plus, Eye, ShoppingCart, Phone, User } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 export default function CustomersPage() {
   const [query, setQuery] = useState('');
@@ -101,6 +102,8 @@ export default function CustomersPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }

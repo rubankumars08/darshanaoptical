@@ -3,6 +3,7 @@
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { useAuth } from '@/app/lib/admin/auth-context';
 import { useState } from 'react';
+import TablePagination from '../components/TablePagination';
 
 const ENTITY_COLORS: Record<string, string> = {
   customer: 'adm-badge-info', product: 'adm-badge-warning', invoice: 'adm-badge-success',
@@ -63,6 +64,7 @@ export default function AuditPage() {
           </tbody>
         </table>
       </div>
+      <TablePagination />
     </div>
   );
 }

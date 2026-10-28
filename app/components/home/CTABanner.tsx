@@ -22,7 +22,7 @@ export default function CTABanner() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.55, ease: EASE_STANDARD }}
           className="relative overflow-hidden rounded-3xl bg-[#1a1b20] border border-neutral-800 shadow-2xl text-white"
         >

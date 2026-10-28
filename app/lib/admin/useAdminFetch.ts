@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { handleAdminUnauthorized } from './api';
 
 interface FetchState<T> {
   data: T | null;
@@ -40,6 +41,10 @@ export function useAdminFetch<T>(
       const res = await fetch(fullUrl, { signal: ctrl.signal });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          await handleAdminUnauthorized();
+          return;
+        }
         throw new Error(j.error ?? `HTTP ${res.status}`);
       }
       const json = await res.json();

@@ -79,7 +79,7 @@ export default function LensSolutions() {
         <motion.div
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, margin: "-40px" }}
           variants={{
             hidden: { opacity: 0 },
             show: {
@@ -106,7 +106,7 @@ export default function LensSolutions() {
               >
                 <Link
                   href="/lenses"
-                  className="flex flex-col h-full overflow-hidden rounded-2xl bg-neutral-50/70 p-3.5 border border-neutral-200/80 shadow-2xs hover:shadow-lg hover:border-brand-orange/40 hover:bg-white transition-all group cursor-pointer"
+                  className="flex flex-col h-full overflow-hidden rounded-2xl bg-neutral-50/70 p-3.5 border border-neutral-200/80 shadow-sm hover:shadow-lg hover:border-brand-orange/40 hover:bg-white transition-all group cursor-pointer"
                 >
                   {/* Lens Visual with Tag */}
                   <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-neutral-100 mb-3">

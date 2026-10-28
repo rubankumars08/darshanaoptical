@@ -10,20 +10,23 @@ export default function PageLoadProgress() {
   if (prefersReduced) return null;
 
   return (
-    <motion.div
-      key={pathname}
-      initial={{ scaleX: 0, opacity: 1 }}
-      animate={{
-        scaleX: [0, 0.4, 0.8, 1],
-        opacity: [1, 1, 1, 0],
-      }}
-      transition={{
-        duration: 0.65,
-        times: [0, 0.3, 0.7, 1],
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      style={{ originX: 0 }}
-      className="fixed top-0 left-0 right-0 h-[2.5px] z-100 bg-linear-to-r from-brand-orange via-orange-400 to-amber-400 shadow-[0_0_12px_rgba(252,90,6,0.85)] pointer-events-none"
-    />
+    <div key={pathname} className="route-loader" aria-hidden="true">
+      <motion.div
+        initial={{ scaleX: 0, opacity: 1 }}
+        animate={{ scaleX: [0, 0.45, 0.82, 1], opacity: [1, 1, 1, 0] }}
+        transition={{ duration: 0.72, times: [0, 0.28, 0.7, 1], ease: [0.22, 1, 0.36, 1] }}
+        style={{ originX: 0 }}
+        className="route-loader__track"
+      />
+      <motion.div
+        initial={{ x: "-10vw", opacity: 0 }}
+        animate={{ x: "102vw", opacity: [0, 1, 1, 0] }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+        className="route-loader__lens"
+      >
+        <span />
+        <span />
+      </motion.div>
+    </div>
   );
 }

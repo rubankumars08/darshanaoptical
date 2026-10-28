@@ -54,7 +54,7 @@ export default function NewArrivals() {
   };
 
   return (
-    <section className="bg-white py-12 sm:py-16">
+    <section id="new-arrivals" className="bg-white py-12 sm:py-16">
       <div className="container-brand space-y-8">
         {/* Section Header */}
         <div className="flex items-center justify-between">
@@ -87,7 +87,7 @@ export default function NewArrivals() {
           <motion.div
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, margin: "-40px" }}
             variants={{
               hidden: { opacity: 0 },
               show: {

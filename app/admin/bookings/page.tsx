@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPut } from '@/app/lib/admin/api';
 import { CalendarCheck, MessageSquare, Phone, Mail, UserPlus } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 const APPT_STATUS = ['pending', 'confirmed', 'completed', 'cancelled'];
 const INQ_STATUS = ['new', 'contacted', 'closed'];
@@ -76,6 +77,7 @@ export default function BookingsPage() {
       </div>
 
       {tab === 'appointments' ? (
+        <>
         <div className="adm-table-wrap">
           <table className="adm-table">
             <thead>
@@ -127,7 +129,10 @@ export default function BookingsPage() {
             </tbody>
           </table>
         </div>
+        <TablePagination />
+        </>
       ) : (
+        <>
         <div className="adm-table-wrap">
           <table className="adm-table">
             <thead>
@@ -165,6 +170,8 @@ export default function BookingsPage() {
             </tbody>
           </table>
         </div>
+        <TablePagination />
+        </>
       )}
     </div>
   );

@@ -50,7 +50,7 @@ export default function Hero() {
       <div className="container-brand">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Left Column */}
-          <div className="lg:col-span-6 space-y-6">
+          <div className="min-w-0 lg:col-span-6 space-y-6">
             {/* Trusted Location Badge */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -67,7 +67,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE_STANDARD }}
-              className="text-4xl font-extrabold tracking-[-0.04em] text-neutral-950 sm:text-5xl lg:text-[54px] leading-[1.1] [text-wrap:balance]"
+              className="max-w-full break-words text-4xl font-extrabold tracking-[-0.04em] text-neutral-950 sm:text-5xl lg:text-[54px] leading-[1.1] [text-wrap:balance]"
             >
               <motion.span
                 initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
@@ -92,7 +92,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.35, ease: EASE_STANDARD }}
-              className="max-w-xl text-base text-neutral-600 leading-relaxed font-normal sm:text-lg [text-wrap:pretty]"
+              className="max-w-full text-base text-neutral-600 leading-relaxed font-normal sm:max-w-xl sm:text-lg [text-wrap:pretty]"
             >
               Get your eyes tested and choose comfortable glasses that suit
               your face, daily work and budget.
@@ -163,7 +163,7 @@ export default function Hero() {
 
           {/* Right Column: Hero Visual with Circular Lens Mask Reveal & Badge */}
           <div
-            className="lg:col-span-6 relative flex justify-center lg:justify-end"
+            className="relative min-w-0 lg:col-span-6 flex justify-center lg:justify-end"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           >

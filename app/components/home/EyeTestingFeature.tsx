@@ -27,7 +27,7 @@ export default function EyeTestingFeature() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.55, ease: EASE_STANDARD }}
             className="flex flex-col sm:flex-row overflow-hidden rounded-2xl bg-neutral-50/80 border border-neutral-200/80 shadow-xs hover:shadow-lg transition-all duration-300 group"
           >
@@ -92,7 +92,7 @@ export default function EyeTestingFeature() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.55, delay: 0.1, ease: EASE_STANDARD }}
             className="flex flex-col sm:flex-row overflow-hidden rounded-2xl bg-[#1c1d22] text-white border border-neutral-800 shadow-xs hover:shadow-xl transition-all duration-300 group"
           >

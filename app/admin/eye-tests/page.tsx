@@ -7,6 +7,7 @@ import { useAuth } from '@/app/lib/admin/auth-context';
 import { useAdminFetch } from '@/app/lib/admin/useAdminFetch';
 import { adminPost } from '@/app/lib/admin/api';
 import { Search, Plus, X, FileText } from 'lucide-react';
+import TablePagination from '../components/TablePagination';
 
 const BLANK = {
   customer_id: '', customer_name: '', customer_phone: '',
@@ -156,6 +157,8 @@ export default function EyeTestsPage() {
           </tbody>
         </table>
       </div>
+
+      <TablePagination />
     </div>
   );
 }
