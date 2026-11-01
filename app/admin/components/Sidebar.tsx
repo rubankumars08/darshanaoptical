@@ -89,7 +89,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <nav id="admin-navigation" className={`adm-sidebar${isOpen ? ' is-open' : ''}`} aria-label="Admin navigation">
       {/* Logo */}
-      <Link href="/admin/dashboard" className="adm-sidebar-logo" style={{ textDecoration: 'none' }} onClick={onClose}>
+      <Link href="/admin/dashboard" className="adm-sidebar-logo" onClick={onClose}>
         <div className="adm-sidebar-logo-icon">D</div>
         <div className="adm-sidebar-logo-text">
           <span className="adm-sidebar-logo-name">Darshana Optical</span>
@@ -122,11 +122,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         })}
 
         {/* Logout */}
-        <div className="adm-nav-section" style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="adm-nav-section adm-nav-logout">
           <button
             onClick={logout}
-            className="adm-nav-item"
-            style={{ width: '100%', border: 'none', background: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.5)' }}
+            className="adm-nav-item adm-nav-logout-button"
           >
             <LogOut {...iconSize} />
             Logout
@@ -141,7 +140,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="adm-sidebar-user-name">{user.name}</div>
           <div className="adm-sidebar-user-role">{user.role}</div>
         </div>
-        <ChevronRight width={14} height={14} style={{ color: 'rgba(255,255,255,0.25)', flexShrink: 0 }} />
+        <ChevronRight width={14} height={14} className="adm-sidebar-user-chevron" />
       </div>
     </nav>
   );

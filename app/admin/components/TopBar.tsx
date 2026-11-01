@@ -75,15 +75,14 @@ export default function TopBar({ onOpenNav }: { onOpenNav: () => void }) {
         {pathname !== '/admin/counter' && (
           <Link
             href="/admin/counter"
-            className="adm-btn adm-btn-secondary"
-            style={{ height: 36, fontSize: 12.5, fontWeight: 700, borderColor: '#fc5a06', color: '#fc5a06' }}
+            className="adm-btn adm-btn-counter"
           >
             <Zap width={14} height={14} /> <span className="adm-action-label">Express Counter</span>
           </Link>
         )}
 
         {action && (
-          <Link href={action.href} className="adm-btn adm-btn-primary" style={{ height: 36, fontSize: 13 }}>
+          <Link href={action.href} className="adm-btn adm-btn-primary adm-topbar-primary">
             <Plus width={14} height={14} />
             <span className="adm-action-label">{action.label}</span>
           </Link>

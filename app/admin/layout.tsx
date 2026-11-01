@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Manrope } from 'next/font/google';
 import './admin.css';
 import AdminShell from './components/AdminShell';
 import { AuthProvider } from '@/app/lib/admin/auth-context';
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-manrope',
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 });
@@ -23,10 +23,10 @@ export const metadata: Metadata = {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={inter.variable}
+      className={manrope.variable}
       data-lenis-prevent
       style={{
-        fontFamily: 'var(--font-inter), sans-serif',
+        fontFamily: 'var(--font-manrope), sans-serif',
         minHeight: '100dvh',
         width: '100%',
         display: 'flex',
